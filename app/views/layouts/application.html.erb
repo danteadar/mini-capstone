@@ -16,14 +16,17 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Things for Sale</a>
+      <a class="navbar-brand" href="/">Things for Sale</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="/products/new">New Product <span class="sr-only">(current)</span></a></li>
-        <li><a href="/images/new">New Image</a></li>
+        <% if is_admin? %>
+          <li class="active"><a href="/products/new">New Product <span class="sr-only">(current)</span></a></li>
+          <li><a href="/images/new">New Image</a></li>
+        <% end %>
+
         <li><a href="/carted_products">Checkout</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sort By <span class="caret"></span></a>
@@ -72,5 +75,16 @@
 
   <body>
     <%= yield %>
+    <% if @product && @product.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@product.errors.count, "error") %> prohibited this product from being saved:</h2>
+ 
+    <ul>
+    <% @product.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
   </body>
 </html>

@@ -1,5 +1,7 @@
 class ProductsController < ApplicationController
 
+  before_action :authenticate_admin!, except: [:index, :show, :search]
+
   def index
     @products = Product.all
     
@@ -23,6 +25,7 @@ class ProductsController < ApplicationController
   end
 
   def new
+    @product = Product.new
   end
 
   def create
@@ -34,15 +37,15 @@ class ProductsController < ApplicationController
       supplier_id: params[:supplier_id]['supplier_id']
       )
 
-    # @product.images.create(url: params[:image], product_id: @product.id)
+    if @product.save
+      flash[:success] = "Product Created"
+      redirect_to "/products/show/#{@product.id}"
+    else
+      render :new
+    end
 
-    flash[:success] = "Product successfully created!"
-    redirect_to "/products/show/#{@product.id}"
-  end
+    #@product.images.create(url: params[:image], product_id: @product.id)
 
-  def buy
-    product_id = params[:id]
-    @product = Product.find_by(id: product_id)
   end
 
   def show
@@ -83,6 +86,7 @@ class ProductsController < ApplicationController
     @product.destroy
     flash[:warning] = "This is the end of that!"
     redirect_to "/"
+
   end
 
 end
