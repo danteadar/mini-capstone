@@ -1,0 +1,36 @@
+<% flash.each do |key, message| %>
+  <div class="alert alert-<%= key %> alert-dismissible" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> 
+  <%= message %>
+  </div>
+
+<% end %>
+
+<div class="container">
+  <%= yield %>
+</div>
+
+
+<h1>Products:</h1>
+
+<% @products.each_slice(3) do |three_products| %>
+  <div class="row">
+    <% three_products.each do |product| %>
+      <div class="col-md-4">
+        <div class="well">
+
+          <% if product.images.count > 0 %>
+              <p><img src="<%= product.images.first.url %>" alt="Picture"></p>
+          <% else %>
+              <p>No Image Available.</p>
+          <% end %>
+          
+          <p><a href="/products/show/<%= product.id %>"><%= product.name %></a>, $<%= product.price %></p>
+          <p><%= product.description %></p>
+          <a href="/products/edit/<%= product.id %>"><button id ="btn-primary">Edit</button></a>
+          <br>
+          <br>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
